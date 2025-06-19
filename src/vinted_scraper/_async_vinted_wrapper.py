@@ -147,7 +147,7 @@ class AsyncVintedWrapper:
             request. Default value: None.
         :return: A Dict that contains the JSON response with the item's details.
         """
-        return await self._curl(f"/items/{item_id}", params=params)
+        return await self._curl(f"/items/{item_id}/details", params=params)
 
     async def _curl(
         self, endpoint: str, params: Optional[Dict] = None
