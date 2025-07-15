@@ -13,7 +13,7 @@ class VintedItem:
     id: Optional[str] = None
     title: Optional[str] = None
     price: Optional[float] = None
-    is_visible: Optional[int] = None
+    is_visible: Optional[bool] = None
     discount: Optional[str] = None
     currency: Optional[str] = None
     brand: Optional[VintedBrand] = None
@@ -124,7 +124,7 @@ class VintedItem:
     is_upload_story_button_visible: Optional[bool] = None
     offline_verification: Optional[bool] = None
     offline_verification_fee: Optional[float] = None
-    is_sold: Optional[bool] = None
+    available: Optional[bool] = None
 
     def __init__(self, json_data=None):
         if json_data is not None:
