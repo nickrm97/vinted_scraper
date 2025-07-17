@@ -33,6 +33,7 @@ class AsyncVintedWrapper:
         baseurl: str,
         user_agent: Optional[str] = None,
         config: Optional[Dict] = None,
+        proxies: Optional[Dict] = None,
     ):
         """
         Factory method that creates an instance of the AsyncVintedWrapper class.
@@ -41,12 +42,11 @@ class AsyncVintedWrapper:
 
         :param baseurl: The base URL of the Vinted site
         :param user_agent: The user agent to use, if not provided it be chosen randomly.
-        :param session_cookie: The session cookie to use, if not provided it be fetched
-            automatically.
         :param config: The configuration of the HTTPX client, it will be merged with
+        :param proxies: The proxies to use for HTTP requests
         :return: An instance of the class
         """
-        self = cls(baseurl, user_agent=user_agent, config=config)
+        self = cls(baseurl, user_agent=user_agent, config=config, proxies=proxies)
         self._session_cookie = await self.refresh_cookie()
         return self
 
@@ -56,6 +56,7 @@ class AsyncVintedWrapper:
         session_cookie: Optional[str] = None,
         user_agent: Optional[str] = None,
         config: Optional[Dict] = None,
+        proxies: Optional[Dict] = None,
     ):
         # Validate
         if not url_validator(baseurl):
@@ -71,6 +72,22 @@ class AsyncVintedWrapper:
             session_cookie=session_cookie,
             config=config,
         )
+
+        # Handle proxies - merge into config if provided
+        if proxies:
+            if config is None:
+                config = {}
+            # Convert requests-style proxies dict to httpx format
+            # httpx expects a single proxy URL or a dict with scheme mapping
+            if isinstance(proxies, dict):
+                # If multiple proxies provided, use the https one as primary
+                # or fallback to http, as httpx uses a single proxy parameter
+                proxy_url = proxies.get('https://') or proxies.get('https') or proxies.get('http://') or proxies.get('http')
+                if proxy_url:
+                    config['proxy'] = proxy_url
+            else:
+                # If it's a string, use it directly
+                config['proxy'] = proxies
 
         # init
         self._client = httpx.AsyncClient(**get_httpx_config(baseurl, config))

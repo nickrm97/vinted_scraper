@@ -48,12 +48,12 @@ class VintedItem:
     is_reserved: Optional[int] = None
     reserved_for_user_id: Optional[str] = None
     is_unisex: Optional[int] = None
-    is_closed: Optional[int] = None
+    is_closed: Optional[int] = None ### this one
     active_bid_count: Optional[int] = None
     moderation_status: Optional[int] = None
     last_push_up_at: Optional[str] = None
     package_size_standard: Optional[bool] = None
-    item_closing_action: Optional[str] = None
+    item_closing_action: Optional[str] = None ### this one
     related_catalog_ids: Optional[List[int]] = None
     related_catalogs_enabled: Optional[bool] = None
     size: Optional[str] = None
